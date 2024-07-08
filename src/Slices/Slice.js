@@ -12,8 +12,16 @@ const kanbanSlice = createSlice({
     initialState,
     reducers: {
         sameColumnDrag : (state, action)=>{
-            console.log('sameColumnDrag action is - ', action);
-            state.todo = action.payload;
+            
+            if(action.payload.colId === 'todo'){
+                state.todo = action.payload.reorderedList
+            }
+            else if(action.payload.colId === 'inprogress'){
+                state.inprogress = action.payload.reorderedList
+            }
+            else{
+                state.completed = action.payload.reorderedList
+            }
         },
         updateSrNumber: (state, action)=>{
             state.srNumber = action.payload.newSr

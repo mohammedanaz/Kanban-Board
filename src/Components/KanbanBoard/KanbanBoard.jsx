@@ -14,6 +14,8 @@ export default function KanbanBoard() {
   const [inputText, setInputText] = useState('')
   const srNumber = useSelector((state)=> state.kanban.srNumber)
   const todo = useSelector((state)=> state.kanban.todo)
+  const inprogress = useSelector((state)=> state.kanban.inprogress)
+  const completed = useSelector((state)=> state.kanban.completed)
   const dispatch = useDispatch()
 
   function handleChange(e){
@@ -22,9 +24,9 @@ export default function KanbanBoard() {
 
   function handleClick(){
     const newSr = srNumber + 1;
-    const newInputObj = {id:newSr, task:inputText}
+    const newTodoObj = {id:newSr, task:inputText}
     dispatch(updateSrNumber({newSr:newSr}))
-    dispatch(addNewTodo(newInputObj))
+    dispatch(addNewTodo(newTodoObj))
     setInputText('')
   }
 
@@ -36,10 +38,24 @@ export default function KanbanBoard() {
   }
 
   function handleDragEnd(result){
-    if(result.source.dropableId === result.destination.dropableId){
-      const reorderedTodo = reorder(todo, result.source.index, result.destination.index)
-      dispatch(sameColumnDrag(reorderedTodo))
+    if(!result.destination){
+      return
     }
+    else if(result.source.droppableId === result.destination.droppableId){
+      let reorderedList = []
+      if(result.source.droppableId === 'todo'){
+        reorderedList = reorder(todo, result.source.index, result.destination.index)
+      }
+      else if(result.source.droppableId === 'inprogress'){
+        reorderedList = reorder(inprogress, result.source.index, result.destination.index)
+      }
+      else{
+        reorderedList = reorder(completed, result.source.index, result.destination.index)
+      }
+      
+      dispatch(sameColumnDrag({reorderedList: reorderedList, colId: result.source.droppableId}))
+    }
+
   }
 
   return (
@@ -58,7 +74,9 @@ export default function KanbanBoard() {
           </button>
         </div>
         <div className='d-flex justify-content-between w-75'>
-          <Column title="Todo"  id='col-1' tasks = {todo} />
+          <Column title="Todo"  id='todo' tasks = {todo} />
+          <Column title="Inprogress"  id='inprogress' tasks = {inprogress} />
+          <Column title="Completed"  id='completed' tasks = {completed} />
         </div>
       </div>
     </DragDropContext>

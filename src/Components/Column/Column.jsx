@@ -13,7 +13,6 @@ export default function Column({title, tasks, id}) {
           <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          style={{minHeight:'50px'}}
           >
             <Task tasks={tasks}/>
             {provided.placeholder}
