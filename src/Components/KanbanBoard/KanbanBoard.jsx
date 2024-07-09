@@ -84,7 +84,7 @@ export default function KanbanBoard() {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className='kanbanDiv d-flex flex-column align-items-center pb-5 pt-3'>
-        <h1 className='text-center text-primary'>Kanban Board</h1>
+        <h1 className='text-center text-white'>Kanban Board</h1>
         <br />
         <div className='input-group rounded-3 mb-2 w-75 bg-info-subtle'>
           <input className='form-control my-2 ms-2' type="text" 
@@ -92,7 +92,7 @@ export default function KanbanBoard() {
            onChange={handleChange}
            value={inputText}
            />
-          <button className='btn btn-primary my-2 me-2' type='button' onClick={handleClick}>
+          <button className='btn btn-info my-2 me-2' type='button' onClick={handleClick}>
             Add Todo
           </button>
         </div>
