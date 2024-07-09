@@ -33,9 +33,23 @@ const kanbanSlice = createSlice({
         },
         addNewTodo: (state, action)=>{
             state.todo.push(action.payload)
+        },
+        changeIsEditable: (state, action)=>{
+            state[action.payload.colId].find((item)=> item.id === action.payload.taskId).isEditable = true;
+        },
+        saveEditedTask: (state, action)=>{
+            state[action.payload.colId].find((item)=> item.id === action.payload.taskId).task = action.payload.newTask;
+            state[action.payload.colId].find((item)=> item.id === action.payload.taskId).isEditable = false;
         }
     }
 })
 
-export const {sameColumnDrag, crossColumnDrag, updateSrNumber, addNewTodo} = kanbanSlice.actions
+export const {
+    sameColumnDrag, 
+    crossColumnDrag, 
+    updateSrNumber, 
+    addNewTodo,
+    changeIsEditable,
+    saveEditedTask
+} = kanbanSlice.actions
 export default kanbanSlice.reducer

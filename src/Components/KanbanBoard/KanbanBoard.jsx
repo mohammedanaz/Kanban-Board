@@ -26,7 +26,7 @@ export default function KanbanBoard() {
   function handleClick(){
     if(inputText !== ''){
       const newSr = srNumber + 1;
-    const newTodoObj = {id:newSr, task:inputText}
+    const newTodoObj = {id:newSr, task:inputText, isEditable: false}
     dispatch(updateSrNumber({newSr:newSr}))
     dispatch(addNewTodo(newTodoObj))
     setInputText('')
@@ -97,9 +97,9 @@ export default function KanbanBoard() {
           </button>
         </div>
         <div className='d-flex flex-column flex-md-row justify-content-between w-75'>
-          <Column title="Todo"  id='todo' tasks = {todo} />
-          <Column title="Inprogress"  id='inprogress' tasks = {inprogress} />
-          <Column title="Completed"  id='completed' tasks = {completed} />
+          <Column title="Todo"  colId='todo' tasks = {todo} />
+          <Column title="Inprogress"  colId='inprogress' tasks = {inprogress} />
+          <Column title="Completed"  colId='completed' tasks = {completed} />
         </div>
       </div>
     </DragDropContext>
