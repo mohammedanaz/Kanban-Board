@@ -6,6 +6,7 @@ const initialState = {
     todo: [],
     inprogress: [],
     completed: [],
+    users: [],
 }
 
 const kanbanSlice = createSlice({
@@ -45,6 +46,10 @@ const kanbanSlice = createSlice({
             console.log('inside delete task reducer');
             const newState = state[action.payload.colId].filter((item)=> item.id !== action.payload.taskId)
             state[action.payload.colId] = newState
+        },
+        createUser: (state, action)=>{
+            state.users = action.payload
+            console.log('users is- ', state.users);
         }
     }
 })
@@ -56,6 +61,7 @@ export const {
     addNewTodo,
     changeIsEditable,
     saveEditedTask,
-    deleteTask
+    deleteTask,
+    createUser
 } = kanbanSlice.actions
 export default kanbanSlice.reducer
