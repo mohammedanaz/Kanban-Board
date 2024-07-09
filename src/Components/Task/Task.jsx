@@ -32,7 +32,10 @@ export default function Task({tasks, colId}) {
   }
 
   function handleDeleteTask(taskId, colId){
-    dispatch(deleteTask({taskId:taskId, colId: colId}))
+    if(window.confirm('Do you want to delete the task?')){
+      dispatch(deleteTask({taskId:taskId, colId: colId}))
+    }
+    
   }
 
   return (
