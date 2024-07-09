@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import './dragDiv.css'
-import {changeIsEditable, saveEditedTask} from '../../Slices/Slice'
+import {changeIsEditable, saveEditedTask, deleteTask} from '../../Slices/Slice'
 import { useDispatch } from 'react-redux'
 
 export default function Task({tasks, colId}) {
@@ -31,8 +31,8 @@ export default function Task({tasks, colId}) {
     )
   }
 
-  function handleDeleteTask(){
-
+  function handleDeleteTask(taskId, colId){
+    dispatch(deleteTask({taskId:taskId, colId: colId}))
   }
 
   return (
@@ -67,7 +67,9 @@ export default function Task({tasks, colId}) {
                         {task.task}
                       </div>
                       <div className='d-flex flex-column'>
-                        <button className='btn' onClick={handleDeleteTask}><i className="bi bi-trash"></i></button>
+                        <button className='btn' onClick= {()=> handleDeleteTask(task.id, colId)}>
+                          <i className="bi bi-trash"></i>
+                        </button>
                         {(colId!=='completed') && 
                         <button className='btn' onClick={()=>handleChangeIsEditable(task.id, colId)} disabled={colId==='completed'}>
                           <i className="bi bi-pencil-square"></i>

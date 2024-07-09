@@ -5,6 +5,13 @@
 }
 
 .colDiv{
-    min-width: 30%;
-    
+    width: 30%; 
+}
+
+/* ***********media queries************* */
+
+@media(max-width:768px){
+    .colDiv{
+        width: 100%;
+    }
 }

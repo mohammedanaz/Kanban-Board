@@ -1,12 +1,17 @@
 import React from "react"
-import KanbanBoard from "./Components/KanbanBoard/KanbanBoard"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import HomePage from "./Pages/HomePage/HomePage.jsx"
+import LoginPage from "./Pages/LoginPage/LoginPage.jsx"
 
 function App() {
 
   return (
-    <>
-      <KanbanBoard />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

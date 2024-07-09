@@ -40,6 +40,11 @@ const kanbanSlice = createSlice({
         saveEditedTask: (state, action)=>{
             state[action.payload.colId].find((item)=> item.id === action.payload.taskId).task = action.payload.newTask;
             state[action.payload.colId].find((item)=> item.id === action.payload.taskId).isEditable = false;
+        },
+        deleteTask: (state, action)=>{
+            console.log('inside delete task reducer');
+            const newState = state[action.payload.colId].filter((item)=> item.id !== action.payload.taskId)
+            state[action.payload.colId] = newState
         }
     }
 })
@@ -50,6 +55,7 @@ export const {
     updateSrNumber, 
     addNewTodo,
     changeIsEditable,
-    saveEditedTask
+    saveEditedTask,
+    deleteTask
 } = kanbanSlice.actions
 export default kanbanSlice.reducer
