@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { current } from "@reduxjs/toolkit";
 
 const initialState = {
     srNumber: 0,
@@ -12,16 +13,20 @@ const kanbanSlice = createSlice({
     initialState,
     reducers: {
         sameColumnDrag : (state, action)=>{
+            state[action.payload.colId] = action.payload.reorderedList
+        },
+        crossColumnDrag : (state, action)=>{
+            const {
+                sourceColId,destinationColId, sourceIndex, destinationIndex
+            } = action.payload
+            const sourceList = state[sourceColId]
+            const destinationList = state[destinationColId]
+            console.log(current(state[sourceColId]), 'and', current(state[destinationColId]));
+
+            const [removed] = sourceList.splice(sourceIndex,1)
+            destinationList.splice(destinationIndex, 0, removed)
             
-            if(action.payload.colId === 'todo'){
-                state.todo = action.payload.reorderedList
-            }
-            else if(action.payload.colId === 'inprogress'){
-                state.inprogress = action.payload.reorderedList
-            }
-            else{
-                state.completed = action.payload.reorderedList
-            }
+            console.log(current(state[sourceColId]), 'and', current(state[destinationColId]));
         },
         updateSrNumber: (state, action)=>{
             state.srNumber = action.payload.newSr
@@ -32,5 +37,5 @@ const kanbanSlice = createSlice({
     }
 })
 
-export const {sameColumnDrag, updateSrNumber, addNewTodo} = kanbanSlice.actions
+export const {sameColumnDrag, crossColumnDrag, updateSrNumber, addNewTodo} = kanbanSlice.actions
 export default kanbanSlice.reducer

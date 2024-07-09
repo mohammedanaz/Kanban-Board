@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import Column from '../Column/Column'
+import './KanbanBoard.css'
 import { useSelector, useDispatch } from 'react-redux'
-import {sameColumnDrag, updateSrNumber, addNewTodo} from '../../Slices/Slice'
+import {sameColumnDrag, crossColumnDrag, updateSrNumber, addNewTodo} from '../../Slices/Slice'
 
 const tempItems = [
   {id:1 , task:'task-1'},
@@ -23,11 +24,17 @@ export default function KanbanBoard() {
   }
 
   function handleClick(){
-    const newSr = srNumber + 1;
+    if(inputText !== ''){
+      const newSr = srNumber + 1;
     const newTodoObj = {id:newSr, task:inputText}
     dispatch(updateSrNumber({newSr:newSr}))
     dispatch(addNewTodo(newTodoObj))
     setInputText('')
+    }
+    else{
+      window.alert('Type todo before add.')
+      return
+    }
   }
 
   function reorder(arr, startIndex, endIndex){
@@ -38,7 +45,12 @@ export default function KanbanBoard() {
   }
 
   function handleDragEnd(result){
-    if(!result.destination){
+    if(result.source.droppableId === 'completed' && result.destination.droppableId !== 'completed' ){
+      console.log('inside source cant be completed condition');
+      return
+    }
+    else if(!result.destination){
+      console.log('inside destination null condition');
       return
     }
     else if(result.source.droppableId === result.destination.droppableId){
@@ -55,25 +67,36 @@ export default function KanbanBoard() {
       
       dispatch(sameColumnDrag({reorderedList: reorderedList, colId: result.source.droppableId}))
     }
-
+    else{
+      const sourceColId = result.source.droppableId
+      const destinationColId = result.destination.droppableId
+      const sourceIndex = result.source.index
+      const destinationIndex = result.destination.index
+      dispatch(crossColumnDrag({
+        sourceColId: sourceColId,
+        destinationColId: destinationColId,
+        sourceIndex: sourceIndex,
+        destinationIndex: destinationIndex,
+      }))
+    }
   }
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className='d-flex flex-column align-items-center'>
+      <div className='kanbanDiv d-flex flex-column align-items-center pb-5 pt-3'>
         <h1 className='text-center text-primary'>Kanban Board</h1>
         <br />
-        <div className='border rounded-3 my-2 w-75'>
-          <input className='m-2 w-75' type="text" 
+        <div className='input-group rounded-3 mb-2 w-75 bg-info-subtle'>
+          <input className='form-control my-2 ms-2' type="text" 
           placeholder='Enter Todo'
            onChange={handleChange}
            value={inputText}
            />
-          <button className='btn btn-primary m-2' onClick={handleClick}>
+          <button className='btn btn-primary my-2 me-2' type='button' onClick={handleClick}>
             Add Todo
           </button>
         </div>
-        <div className='d-flex justify-content-between w-75'>
+        <div className='d-flex flex-column flex-md-row justify-content-between w-75'>
           <Column title="Todo"  id='todo' tasks = {todo} />
           <Column title="Inprogress"  id='inprogress' tasks = {inprogress} />
           <Column title="Completed"  id='completed' tasks = {completed} />
