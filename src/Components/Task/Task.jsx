@@ -14,21 +14,20 @@ export default function Task({tasks, colId}) {
     ) 
   }
 
-  function handleChangeIsEditable(taskId, colId){
+  function handleChangeIsEditable(taskId, colId, task){
     dispatch(changeIsEditable({taskId:taskId, colId: colId}))
+    setInputText((prevInput)=>(
+      {...prevInput,[taskId]: task})
+    )
   }
 
   function handlesaveEditedTask(taskId, colId, task){
-    if(inputText[taskId] !== undefined){
+    if(inputText[taskId] !== null || inputText[taskId] !== undefined){
       dispatch(saveEditedTask({taskId:taskId, colId: colId, newTask: inputText[taskId]}))
     }
     else{
       dispatch(saveEditedTask({taskId:taskId, colId: colId, newTask: task}))
     }
-
-    setInputText((prevInput)=>(
-      {...prevInput,[taskId]: null})
-    )
   }
 
   function handleDeleteTask(taskId, colId){
@@ -74,7 +73,8 @@ export default function Task({tasks, colId}) {
                           <i className="bi bi-trash"></i>
                         </button>
                         {(colId!=='completed') && 
-                        <button className='btn' onClick={()=>handleChangeIsEditable(task.id, colId)} disabled={colId==='completed'}>
+                        <button className='btn' onClick={()=>handleChangeIsEditable(task.id, colId, task.task)} 
+                          disabled={colId==='completed'}>
                           <i className="bi bi-pencil-square"></i>
                         </button>
                         }

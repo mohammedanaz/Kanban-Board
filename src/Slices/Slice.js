@@ -50,6 +50,7 @@ const kanbanSlice = createSlice({
         createUser: (state, action)=>{
             state.users = action.payload
             console.log('users is- ', state.users);
+            window.alert('new user created successfully.')
         }
     }
 })
